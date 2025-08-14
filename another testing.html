@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Butterfly Awareness | Prototype</title>
+  <style>
+    :root {
+      --bg: #0f172a;        /* slate-900 */
+      --panel: #111827;     /* gray-900 */
+      --muted: #94a3b8;     /* slate-400 */
+      --text: #e5e7eb;      /* gray-200 */
+      --brand: #22c55e;     /* green-500 */
+      --brand-2: #60a5fa;   /* blue-400 */
+      --accent: #f59e0b;    /* amber-500 */
+      --danger: #ef4444;    /* red-500 */
+      --ring: #4ade80;      /* green-400 */
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, Noto Sans, sans-serif;
+      color: var(--text); background: radial-gradient(1200px 800px at 80% -10%, #1e293b 0, #0b1220 45%, #070e1a 100%);
+      line-height: 1.6;
+    }
+
+    /* Header / Nav */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(1.2) blur(10px);
+      background: rgba(7, 14, 26, 0.6);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight: 800; letter-spacing: .3px; }
+    .brand .logo {
+      width: 36px; height: 36px; border-radius: 12px;
+      background: conic-gradient(from 220deg, var(--brand), var(--brand-2), var(--accent));
+      box-shadow: 0 0 0 3px rgba(255,255,255,.06), 0 8px 20px rgba(96,165,250,.35);
+    }
+    nav a { color: var(--text); text-decoration: none; margin: 0 10px; padding: 8px 12px; border-radius: 999px; font-weight: 600; font-size: 14px; opacity: .9; }
+    nav a:hover, nav a.active { background: rgba(255,255,255,.07); opacity: 1; }
+
+    /* Hero */
+    .hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: center; padding: 56px 0 22px; }
+    .hero h1 { font-size: clamp(28px, 4.5vw, 56px); line-height: 1.05; margin: 0 0 14px; }
+    .hero p { color: var(--muted); font-size: clamp(14px, 2vw, 18px); margin: 0 0 22px; }
+    .cta-row { display:flex; gap:12px; flex-wrap: wrap; }
+    .btn { border: 0; border-radius: 999px; padding: 12px 18px; font-weight: 700; cursor: pointer; transition: transform .08s ease, filter .2s ease; }
+    .btn:active { transform: translateY(1px) scale(.99); }
+    .btn-primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:#07101a; box-shadow: 0 10px 20px rgba(34,197,94,.3); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,.14); }
+
+    .hero-card {
+      background: linear-gradient(160deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 18px; border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .hero-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 14px; display:block; }
+    .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+    .stat { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 12px; text-align:center; }
+    .stat .kpi { font-size: 22px; font-weight: 800; }
+    .stat .label { font-size: 12px; color: var(--muted); }
+
+    /* Section shells */
+    section { padding: 56px 0; }
+    section h2 { font-size: clamp(22px, 3.2vw, 34px); margin: 0 0 16px; }
+    section p.lead { color: var(--muted); margin-top: -6px; }
+    .panel { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); box-shadow: var(--shadow); }
+
+    /* Information cards */
+    .grid { display: grid; gap: 16px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { padding: 18px; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); background: linear-gradient(160deg, rgba(31,41,55,.6), rgba(17,24,39,.8)); }
+    .card h3 { margin-top: 0; }
+
+    /* Endangered section */
+    .callout { display:flex; align-items:center; gap:14px; padding: 14px; background: rgba(239, 68, 68, .08); border: 1px solid rgba(239, 68, 68, .25); border-radius: 12px; }
+    .badge { display:inline-block; padding: 6px 10px; font-size: 12px; border-radius: 999px; background: rgba(96,165,250,.15); border: 1px solid rgba(96,165,250,.4); }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 14px; }
+    thead { background: rgba(255,255,255,.06); }
+    th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.06); }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+    .table-wrap { overflow-x: auto; }
+
+    /* Form */
+    form { display: grid; gap: 12px; }
+    label { font-weight: 600; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 12px 12px; border-radius: 12px; background: rgba(255,255,255,.06); color: var(--text); border: 1px solid rgba(255,255,255,.1); outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--ring); box-shadow: 0 0 0 3px rgba(74, 222, 128, .2); }
+    textarea { min-height: 110px; resize: vertical; }
+    .inline { display:flex; gap: 12px; }
+    .preview { display:grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 14px; }
+    .preview .shot { border-radius: 14px; overflow: hidden; border:1px solid rgba(255,255,255,.08); }
+    .preview .shot img { width: 100%; height: 180px; object-fit: cover; display:block; }
+    .empty { color: var(--muted); font-style: italic; }
+
+    /* Footer */
+    footer { border-top: 1px solid rgba(255,255,255,.06); padding: 26px 0 40px; color: var(--muted); }
+
+    /* Responsive */
+    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+    @media (max-width: 680px) { .grid-3 { grid-template-columns: 1fr; } .grid-2 { grid-template-columns: 1fr; } nav a { margin: 0 4px; } }
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Butterfly Guardians</span>
+      </div>
+      <nav aria-label="Primary">
+        <a href="#home" class="active">Home</a>
+        <a href="#information">Information</a>
+        <a href="#endangered">Endangered</a>
+        <a href="#world">Butterflies of the World</a>
+        <a href="#sightings">Sightings</a>
+        <a href="#resources">Further Resources</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero / Home Page -->
+  <main id="home" class="container">
+    <div class="hero">
+      <div>
+        <span class="badge">Sri Lanka & Global Awareness</span>
+        <h1>Protect Butterflies — Small Wings, Big Impact</h1>
+        <p>Butterflies pollinate native plants, signal ecosystem health, and spark curiosity. This prototype shows how our awareness site can educate visitors and inspire action to support butterfly populations.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#sightings">Post a Sighting</a>
+          <a class="btn btn-ghost" href="#information">Learn About Butterflies</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=1200&auto=format&fit=crop" alt="Close-up of a butterfly on a flower"/>
+        <div class="hero-stats">
+          <div class="stat"><div class="kpi" id="kpiSpecies">3,000+</div><div class="label">Asian species</div></div>
+          <div class="stat"><div class="kpi">~10%</div><div class="label">Threatened globally</div></div>
+          <div class="stat"><div class="kpi">1</div><div class="label">Action today</div></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Information Section -->
+  <section id="information">
+    <div class="container">
+      <h2>Information</h2>
+      <p class="lead">Key facts about butterflies: lifecycle, migration, diet, and habitat — written for quick understanding.</p>
+      <div class="grid grid-4 grid-2 grid-3">
+        <article class="card">
+          <h3>Lifecycle</h3>
+          <p>Butterflies undergo <strong>complete metamorphosis</strong>: egg → caterpillar (larva) → chrysalis (pupa) → adult. Each stage has different needs and vulnerabilities.</p>
+        </article>
+        <article class="card">
+          <h3>Migration</h3>
+          <p>Some species migrate seasonally to find food or suitable climate. Routes can span hundreds to thousands of kilometres depending on species.</p>
+        </article>
+        <article class="card">
+          <h3>Diet</h3>
+          <p>Adults feed mostly on nectar; caterpillars depend on specific host plants. Plant diversity directly supports butterfly diversity.</p>
+        </article>
+        <article class="card">
+          <h3>Habitat</h3>
+          <p>Grasslands, forests, wetlands, and home gardens. Threats include habitat loss, pesticide use, invasive plants, and climate change.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Endangered Butterflies Section -->
+  <section id="endangered">
+    <div class="container">
+      <h2>Endangered Butterflies</h2>
+      <p class="lead">Populations are declining in many regions. Conservation focuses on restoring habitat, reducing chemicals, and monitoring trends.</p>
+
+      <div class="panel" style="padding:16px; margin-top:12px;">
+        <div class="callout" role="note">
+          <strong>Why the decline?</strong>
+          <ul>
+            <li>Loss and fragmentation of natural habitats</li>
+            <li>Increased use of pesticides and herbicides</li>
+            <li>Climate change disrupting life cycles</li>
+            <li>Invasive species outcompeting native plants</li>
+          </ul>
+        </div>
+
+        <div class="grid grid-3" style="margin-top:14px;">
+          <div class="card">
+            <h3>What helps</h3>
+            <p>Plant native nectar sources and host plants, leave wild patches, avoid pesticides, and support community science projects.</p>
+          </div>
+          <div class="card">
+            <h3>Community Science</h3>
+            <p>Regular sightings data helps track trends. Submit accurate dates, locations, and photos to improve data quality.</p>
+          </div>
+          <div class="card">
+            <h3>Education</h3>
+            <p>Teaching children and neighbours about butterflies builds long-term support for conservation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Butterflies of the World (Regional table) -->
+  <section id="world">
+    <div class="container">
+      <h2>Butterflies of the World – Sri Lanka Focus</h2>
+      <p class="lead">A sample of species commonly observed in Sri Lanka. Use this as a starting point for the full directory.</p>
+      <div class="table-wrap panel" style="padding: 8px;">
+        <table aria-describedby="world-note">
+          <thead>
+            <tr>
+              <th>Common Name</th>
+              <th>Scientific Name</th>
+              <th>Family</th>
+              <th>Typical Habitat</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sri Lanka Birdwing</td>
+              <td><em>Troides darsius</em></td>
+              <td>Papilionidae</td>
+              <td>Wet zone forests</td>
+              <td>Protected</td>
+            </tr>
+            <tr>
+              <td>Blue Mormon</td>
+              <td><em>Papilio polymnestor</em></td>
+              <td>Papilionidae</td>
+              <td>Gardens, plantations</td>
+              <td>Common</td>
+            </tr>
+            <tr>
+              <td>Common Mormon</td>
+              <td><em>Papilio polytes</em></td>
+              <td>Papilionidae</td>
+              <td>Gardens, lowland forests</td>
+              <td>Common</td>
+            </tr>
+            <tr>
+              <td>Lime Butterfly</td>
+              <td><em>Papilio demoleus</em></td>
+              <td>Papilionidae</td>
+              <td>Open areas, farmlands</td>
+              <td>Common</td>
+            </tr>
+            <tr>
+              <td>Plain Tiger</td>
+              <td><em>Danaus chrysippus</em></td>
+              <td>Nymphalidae</td>
+              <td>Grasslands, roadsides</td>
+              <td>Common</td>
+            </tr>
+            <tr>
+              <td>Common Jezebel</td>
+              <td><em>Delias eucharis</em></td>
+              <td>Pieridae</td>
+              <td>Gardens, edges of forests</td>
+              <td>Common</td>
+            </tr>
+            <tr>
+              <td>Crimson Rose</td>
+              <td><em>Pachliopta hector</em></td>
+              <td>Papilionidae</td>
+              <td>Coastal areas, gardens</td>
+              <td>Common</td>
+            </tr>
+          </tbody>
+        </table>
+        <p id="world-note" class="empty" style="padding:10px 8px 0;">This is a prototype subset. The final site can load a larger, filterable table from a data file or CMS.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Butterfly Sightings (Form) -->
+  <section id="sightings">
+    <div class="container">
+      <h2>Butterfly Sightings</h2>
+      <p class="lead">Share what you saw to support conservation. Your post helps map habitats and seasonal patterns.</p>
+
+      <div class="panel" style="padding: 18px;">
+        <form id="sightingForm" novalidate>
+          <div class="grid grid-2">
+            <div>
+              <label for="species">Species *</label>
+              <input id="species" name="species" placeholder="e.g., Sri Lanka Birdwing" required />
+            </div>
+            <div>
+              <label for="date">Date *</label>
+              <input id="date" name="date" type="date" required />
+            </div>
+          </div>
+
+          <div class="grid grid-2">
+            <div>
+              <label for="location">Location *</label>
+              <input id="location" name="location" placeholder="e.g., Sinharaja Forest Reserve" required />
+            </div>
+            <div>
+              <label for="region">Region</label>
+              <select id="region" name="region">
+                <option value="">Select region</option>
+                <option>Western</option>
+                <option>Central</option>
+                <option>Southern</option>
+                <option>Northern</option>
+                <option>Eastern</option>
+                <option>North Western</option>
+                <option>North Central</option>
+                <option>Uva</option>
+                <option>Sabaragamuwa</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" placeholder="Behaviour, host plant, weather, etc."></textarea>
+          </div>
+
+          <div>
+            <label for="photo">Upload Photo</label>
+            <input id="photo" name="photo" type="file" accept="image/*" />
+          </div>
+
+          <div class="inline">
+            <button type="submit" class="btn btn-primary">Submit Sighting</button>
+            <button type="button" id="resetBtn" class="btn btn-ghost">Reset</button>
+          </div>
+        </form>
+
+        <div style="margin-top: 18px;">
+          <h3 style="margin: 0 0 8px;">Recent Sightings (Preview)</h3>
+          <div id="previewList" class="preview">
+            <p class="empty">No sightings yet. Be the first to post!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Further Resources -->
+  <section id="resources">
+    <div class="container">
+      <h2>Further Resources</h2>
+      <p class="lead">Explore these organisations and guides for deeper learning and local action.</p>
+      <div class="grid grid-3">
+        <article class="card">
+          <h3>Local Field Guides</h3>
+          <ul>
+            <li><a target="_blank" href="https://www.inaturalist.org/">iNaturalist – Identification & records</a></li>
+            <li><a target="_blank" href="https://www.butterfly-conservation.org/">Butterfly Conservation</a></li>
+            <li><a target="_blank" href="https://www.xerces.org/">Xerces Society (pollinator resources)</a></li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Gardening for Butterflies</h3>
+          <ul>
+            <li>Plant native nectar species</li>
+            <li>Include host plants for caterpillars</li>
+            <li>Avoid pesticides & herbicides</li>
+            <li>Provide shallow water & wild corners</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Get Involved</h3>
+          <ul>
+            <li>Join local nature clubs & counts</li>
+            <li>Share sightings with photos and GPS</li>
+            <li>Support protected areas & education</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div>© <span id="year"></span> Butterfly Guardians — Prototype for awareness and education.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple active link highlight on scroll
+    const sections = document.querySelectorAll('main, section');
+    const navLinks = document.querySelectorAll('nav a');
+    const byId = id => document.getElementById(id);
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const link = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { threshold: 0.6 });
+
+    sections.forEach(s => io.observe(s));
+
+    // Footer year
+    byId('year').textContent = new Date().getFullYear();
+
+    // Form handling: client-side preview only
+    const form = byId('sightingForm');
+    const previewList = byId('previewList');
+    const resetBtn = byId('resetBtn');
+
+    function cardHTML(dataUrl, species, date, location, notes){
+      return `
+        <div class="shot">
+          ${dataUrl ? `<img src="${dataUrl}" alt="Photo of ${species}">` : `<div style="height:180px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);">No photo</div>`}
+          <div style="padding:12px;">
+            <div style="font-weight:800;">${species}</div>
+            <div style="font-size:12px;opacity:.8;">${date} — ${location}</div>
+            ${notes ? `<p style="margin:8px 0 0; font-size:14px;">${notes}</p>` : ''}
+          </div>
+        </div>`
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const species = fd.get('species')?.toString().trim();
+      const date = fd.get('date');
+      const location = fd.get('location')?.toString().trim();
+      const notes = fd.get('notes')?.toString().trim();
+      const file = fd.get('photo');
+
+      // basic validation
+      if (!species || !date || !location) {
+        alert('Please fill in Species, Date, and Location.');
+        return;
+      }
+
+      let dataUrl = '';
+      if (file && file.size) {
+        dataUrl = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // Remove empty state
+      const empty = previewList.querySelector('.empty');
+      if (empty) empty.remove();
+
+      // Add preview card
+      previewList.insertAdjacentHTML('afterbegin', cardHTML(dataUrl, species, date, location, notes));
+
+      // Reset form but keep region selection
+      const regionVal = form.region.value;
+      form.reset();
+      form.region.value = regionVal;
+    });
+
+    resetBtn.addEventListener('click', () => form.reset());
+  </script>
+</body>
+</html>

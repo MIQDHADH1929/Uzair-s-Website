@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css" >
+  <title>Project Butterfly</title>
+  <link rel="icon" type="image/x-icon" href="Titleimage1.png">
+</head>
+<body>
+
+
+<header>
+    <div class="container nav">
+      <div class="brand">
+        <span>Butterfly Guardians</span>
+      </div>
+      <nav aria-label="Primary">
+        <a href="#home" class="active">Home</a>
+        <a href="#information">Information</a>
+        <a href="Endangered.html">Endangered</a>
+        <a href="Butterflies of the World.html">Butterflies of the World</a>
+        <a href="Sightings.html">Sightings</a>
+        <a href="Further Resources.html">Further Resources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home" class="container">
+    <div class="hero">
+      <div>
+        <span class="badge">Sri Lanka & Global Awareness</span>
+        <h1>Protect Butterflies — Small Wings, Big Impact</h1>
+        <p>Butterflies pollinate native plants, signal ecosystem health, and spark curiosity. This prototype shows how our awareness site can educate visitors and inspire action to support butterfly populations.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="Sightings.html">Post a Sighting</a>
+          <a class="btn btn-ghost" href="#information">Learn About Butterflies</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <img src="Butterfly1.jpg" alt="Close-up of a butterfly on a flower"/>
+        <div class="hero-stats">
+          <div class="stat"><div class="kpi" id="kpiSpecies">3,000+</div><div class="label">Asian species</div></div>
+          <div class="stat"><div class="kpi">~10%</div><div class="label">Threatened globally</div></div>
+          <div class="stat"><div class="kpi">1</div><div class="label">Action today</div></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+    <section id="information">
+    <div class="container">
+      <h2>Information</h2>
+      <p class="lead">Key facts about butterflies: lifecycle, migration, diet, and habitats.</p>
+      <div class="grid grid-4 grid-2 grid-3">
+        <article class="card">
+          <h3>Lifecycle</h3>
+          <p>The butterfly lifecycle has four stages: egg, larva (caterpillar), pupa (chrysalis), and adult. A female butterfly lays eggs on host plants, which hatch into caterpillars. Caterpillars primarily eat leaves and grow rapidly, shedding their skin several times. Once fully grown, they form a pupa, where they undergo metamorphosis. Inside the chrysalis, the caterpillar’s body transforms into a butterfly with wings. After emerging, the adult butterfly dries its wings before flying. Adults feed mainly on nectar, helping in pollination. This cycle repeats, ensuring the survival of the species and maintaining their role in the ecosystem. The process symbolizes transformation and renewal.</p>    
+        </article>
+        <article class="card">
+          <h3>Migration</h3>
+          <p>Butterfly migration is the seasonal movement of certain species to find suitable climates and food sources. One of the most famous examples is the Monarch butterfly, which travels thousands of kilometers from North America to central Mexico to escape winter cold. Migration helps butterflies survive harsh weather and maintain their life cycle. These journeys are often guided by environmental cues like temperature, daylight, and wind patterns. Along the way, butterflies feed on nectar to maintain energy. Migration not only ensures survival but also supports pollination across regions, making it an important ecological process for both butterflies and the plants they visit.</p>       
+        </article>
+        <article class="card">
+          <h3>Diet</h3>
+          <p>Butterflies have a liquid diet, as their mouthparts are adapted for sipping rather than chewing. Most adult butterflies feed on nectar from flowers, which provides them with energy in the form of sugars. They use their long, tube-like proboscis to drink. Some species also feed on tree sap, rotting fruit, or moisture from wet soil, a behavior called “puddling,” to obtain minerals and salts. Caterpillars, the larval stage of butterflies, have a completely different diet, feeding mainly on the leaves of specific host plants. This diet supports their rapid growth before metamorphosis. The diet of each stage is essential for survival and reproduction.</p>
+        </article>
+        <article class="card">
+          <h3>Habitat</h3>
+          <p>Butterflies live in a wide range of habitats, including forests, grasslands, meadows, gardens, wetlands, and tropical rainforests. Their habitat choice depends on the availability of host plants for caterpillars and nectar sources for adults. Warm, sunny areas with shelter from strong winds are ideal, as butterflies are cold-blooded and rely on sunlight to regulate body temperature. Some species prefer specific environments, such as marshes or mountain slopes, while others adapt to urban gardens. Healthy habitats also provide safe places for mating, laying eggs, and pupation. Protecting these environments is crucial for butterfly survival and maintai biodiversity in ecosystems.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+   <footer>
+    <div class="container">
+      <div>© <span id="year"></span> Butterfly Guardians — Prototype for awareness and education.</div>
+    </div>
+  </footer>
+
+    <script>
+    // Simple active link highlight on scroll
+    const sections = document.querySelectorAll('main, section');
+    const navLinks = document.querySelectorAll('nav a');
+    const byId = id => document.getElementById(id);
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const link = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { threshold: 0.6 });
+
+    sections.forEach(s => io.observe(s));
+
+    // Footer year
+    byId('year').textContent = new Date().getFullYear();
+
+    // Form handling: client-side preview only
+    const form = byId('sightingForm');
+    const previewList = byId('previewList');
+    const resetBtn = byId('resetBtn');
+
+    function cardHTML(dataUrl, species, date, location, notes){
+      return `
+        <div class="shot">
+          ${dataUrl ? `<img src="${dataUrl}" alt="Photo of ${species}">` : `<div style="height:180px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);">No photo</div>`}
+          <div style="padding:12px;">
+            <div style="font-weight:800;">${species}</div>
+            <div style="font-size:12px;opacity:.8;">${date} — ${location}</div>
+            ${notes ? `<p style="margin:8px 0 0; font-size:14px;">${notes}</p>` : ''}
+          </div>
+        </div>`
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const species = fd.get('species')?.toString().trim();
+      const date = fd.get('date');
+      const location = fd.get('location')?.toString().trim();
+      const notes = fd.get('notes')?.toString().trim();
+      const file = fd.get('photo');
+
+      // basic validation
+      if (!species || !date || !location) {
+        alert('Please fill in Species, Date, and Location.');
+        return;
+      }
+
+      let dataUrl = '';
+      if (file && file.size) {
+        dataUrl = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // Remove empty state
+      const empty = previewList.querySelector('.empty');
+      if (empty) empty.remove();
+
+      // Add preview card
+      previewList.insertAdjacentHTML('afterbegin', cardHTML(dataUrl, species, date, location, notes));
+
+      // Reset form but keep region selection
+      const regionVal = form.region.value;
+      form.reset();
+      form.region.value = regionVal;
+    });
+
+    resetBtn.addEventListener('click', () => form.reset());
+  </script>
+  
+</body>
+</html>

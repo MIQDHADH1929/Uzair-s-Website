@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css" >
+  <title>Project Butterfly</title>
+  <link rel="icon" type="image/x-icon" href="Titleimage1.png">
+</head>
+<body>
+
+
+<header>
+    <div class="container nav">
+      <div class="brand">
+        <span>Butterfly Guardians</span>
+      </div>
+      <nav aria-label="Primary">
+        <a href="Home Page.html" class="active">Home</a>
+        <a href="Home Page.html">Information</a>
+        <a href="Endangered.html">Endangered</a>
+        <a href="Butterflies of the World.html">Butterflies of the World</a>
+        <a href="Further Resources.html">Further Resources</a>
+      </nav>
+    </div>
+  </header>
+
+    <section id="sightings">
+    <div class="container">
+      <h2>Butterfly Sightings</h2>
+      <p class="lead">Share what you saw to support conservation. Your post helps map habitats and seasonal patterns.</p>
+
+      <div class="panel" style="padding: 18px;">
+        <form id="sightingForm" novalidate>
+          <div class="grid grid-2">
+            <div>
+              <label for="species">Species *</label>
+              <input id="species" name="species" placeholder="e.g., Sri Lanka Birdwing" required />
+            </div>
+            <div>
+              <label for="date">Date *</label>
+              <input id="date" name="date" type="date" required />
+            </div>
+          </div>
+
+          <div class="grid grid-2">
+            <div>
+              <label for="location">Location *</label>
+              <input id="location" name="location" placeholder="e.g., Sinharaja Forest Reserve" required />
+            </div>
+            <div>
+              <label for="region">Region</label>
+              <select id="region" name="region">
+                <option value="">Select region</option>
+                <option>Western</option>
+                <option>Central</option>
+                <option>Southern</option>
+                <option>Northern</option>
+                <option>Eastern</option>
+                <option>North Western</option>
+                <option>North Central</option>
+                <option>Uva</option>
+                <option>Sabaragamuwa</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" placeholder="Behaviour, host plant, weather, etc."></textarea>
+          </div>
+
+          <div>
+            <label for="photo">Upload Photo</label>
+            <input id="photo" name="photo" type="file" accept="image/*" />
+          </div>
+
+          <div class="inline">
+            <button type="submit" class="btn btn-primary">Submit Sighting</button>
+            <button type="button" id="resetBtn" class="btn btn-ghost">Reset</button>
+          </div>
+        </form>
+
+        <div style="margin-top: 18px;">
+          <h3 style="margin: 0 0 8px;">Recent Sightings (Preview)</h3>
+          <div id="previewList" class="preview">
+            <p class="empty">No sightings yet. Be the first to post!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div>© <span id="year"></span> Butterfly Guardians — Prototype for awareness and education.</div>
+    </div>
+  </footer>
+  
+</body>
+</html>
